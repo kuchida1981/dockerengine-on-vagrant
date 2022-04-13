@@ -51,6 +51,8 @@ vagrant up
 + config.vm.network "private_network"
 ```
 
+たぶん, VirtualBox ホストの名前も必要です (「vboxnet0」とかそういうの).
+
 ## VMのIPを確認する
 
 VMのIPを確認する. `vagrant ssh` でVMにログイン.

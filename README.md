@@ -3,6 +3,12 @@
 * Vagrant (VirtualBox, Debian/bullseye) 上で動かすDocker Engine
 * Docker Machine (+boot2docker) の代わり
 
+これを用意した理由は docker engine / boot2docker の開発とサポートが終了したことです.
+
+Linuxデスクトップであれば, ネイティブにDockerを動かせますが, 普段使いのユーザー権限だけで動かせるようにしたかったため, Vagrant (VirtualBox) を使っています.
+
+現在は Docker Desktop for Linux という選択肢もある. Windows (WSL2), Mac で使う意味は薄いと思います.
+
 
 # requirements
 

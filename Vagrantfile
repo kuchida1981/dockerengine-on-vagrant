@@ -1,23 +1,32 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-docker_guest_port = "2376"
+docker_guest_port = ENV["VBOXDCR_GUESTPORT"] || "2376"
+docker_host_port  = ENV["VBOXDCR_HOSTPORT"] || "12376"
+shared_dir        = ENV["VBOXDCR_SHAREDDIR"] || ENV["HOME"]
+name              = ENV["VBOXDCR_NAME"] || "default"
+vm_disksize       = ENV["VBOXDCR_VM_DISKSIZE"] || "20GB"
+vm_memory         = ENV["VBOXDCR_VM_MEMORY"] || "1024"
+vm_cpus           = ENV["VBOXDCR_VM_CPUS"] || "2"
+network           = ENV["VBOXDCR_NETWORK"] || "docker"
+
 docker_guest_host = "tcp://0.0.0.0:#{docker_guest_port}"
-docker_host_port = ENV["DOCKER_PORT"] || "12376"
-shared_dir = ENV["VAGRANT_DOCKER_DIR"] || ENV["HOME"]
 
 Vagrant.configure("2") do |config|
   config.vm.box = "debian/bullseye64"
-  config.vm.disk :disk, size: "120GB", primary: true
+  config.vm.disk :disk, size: vm_disksize, primary: true
+
+  config.vm.define name do |name|
+  end
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = 8192
-    vb.cpus = 8
+    vb.memory = vm_memory.to_i
+    vb.cpus = vm_cpus.to_i
     vb.customize ["setextradata", :id, "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled", 0]
   end
 
   config.vm.network "forwarded_port", guest: docker_guest_port, host: docker_host_port
-  config.vm.network "private_network", type: "dhcp", name: "vboxnet1"
+  config.vm.network "private_network", type: "dhcp", name: network
 
   config.vm.synced_folder shared_dir, shared_dir
 

@@ -7,12 +7,12 @@ docker_host_port = ENV["DOCKER_PORT"] || "12376"
 shared_dir = ENV["VAGRANT_DOCKER_DIR"] || ENV["HOME"]
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/jammy64"
+  config.vm.box = "debian/bullseye64"
   config.vm.disk :disk, size: "120GB", primary: true
 
   config.vm.provider "virtualbox" do |vb|
-    vb.memory = 4096
-    vb.cpus = 6
+    vb.memory = 8192
+    vb.cpus = 8
     vb.customize ["setextradata", :id, "VBoxInternal/Devices/VMMDev/0/Config/GetHostTimeDisabled", 0]
   end
 
@@ -22,6 +22,7 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder shared_dir, shared_dir
 
   config.vm.provision "shell", inline: <<-SHELL
+  resize2fs /dev/sda1
   echo DOCKER_HOST=#{docker_guest_host} >> /etc/environment
   export DOCKER_HOST=#{docker_guest_host}
 
@@ -32,7 +33,7 @@ ExecStart=
 ExecStart=/usr/bin/dockerd -H #{docker_guest_host}
 EOF
 
-  apt-get update && apt-get install -y curl
+  apt-get update && apt-get install -y curl systemd-timesyncd
   curl -fsSL https://get.docker.com | sh
   adduser vagrant docker
   SHELL

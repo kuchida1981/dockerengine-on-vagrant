@@ -1,6 +1,6 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
-hogehoge
+
 docker_guest_port = "2376"
 docker_guest_host = "tcp://0.0.0.0:#{docker_guest_port}"
 docker_host_port = ENV["DOCKER_PORT"] || "12376"

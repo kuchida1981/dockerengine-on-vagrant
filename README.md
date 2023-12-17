@@ -126,3 +126,48 @@ Vagrantにおけるマシンの名前です.
 仮想マシンのホストオンリーネットワークの名前を指定してください.
 
 デフォルトは vboxnet1
+
+
+## Tips
+
+仮想マシンのIPを確認する場合は, まず `vagrant global-status` を実行します.
+
+```
+$ vagrant global-status
+id       name               provider   state   directory
+-------------------------------------------------------------------------------------------------------
+009bfef  default            virtualbox saved   /home/kosuke/Documents/Projects/dockerengine-on-vagrant
+e02b0b1  vboxdocker-default virtualbox running /home/kosuke/.local/share/vboxdocker
+```
+
+立ち上げた環境のidを調べて, SSHで調べます.
+
+```
+$ VBOXDCR_NAME=vboxdocker-default vagrant ssh e02b0b1 -c "ip addr"
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host
+       valid_lft forever preferred_lft forever
+2: eth0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 08:00:27:8d:c0:4d brd ff:ff:ff:ff:ff:ff
+    altname enp0s3
+    inet 10.0.2.15/24 brd 10.0.2.255 scope global dynamic eth0
+       valid_lft 84919sec preferred_lft 84919sec
+    inet6 fe80::a00:27ff:fe8d:c04d/64 scope link
+       valid_lft forever preferred_lft forever
+3: eth1: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 08:00:27:d9:b5:6e brd ff:ff:ff:ff:ff:ff
+    altname enp0s8
+    inet 192.168.57.31/24 brd 192.168.57.255 scope global dynamic eth1
+       valid_lft 408sec preferred_lft 408sec
+    inet6 fe80::a00:27ff:fed9:b56e/64 scope link
+       valid_lft forever preferred_lft forever
+4: docker0: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state DOWN group default
+    link/ether 02:42:ff:c0:7f:ae brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+```
+
+ここは少し使いづらい.

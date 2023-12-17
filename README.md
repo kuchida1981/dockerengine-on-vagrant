@@ -14,6 +14,7 @@ Linuxデスクトップであれば, ネイティブにDockerを動かせます�
 
 Vagrant, VirtualBox, Docker, Systemd にそれなりに習熟した人向け.
 
+使い方を示しますが, 適宜調整して使うが良いと思います.
 
 ## Requirements
 

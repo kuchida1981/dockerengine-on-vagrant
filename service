@@ -1,11 +1,11 @@
 [Unit]
-Description = Docker Engine on user level
+Description = Docker Engine on Virtualbox
 
 [Service]
 Type=oneshot
-Environment="VAGRANT_CWD=%h/Documents/Projects/dockerengine-on-vagrant"
-Environment="VAGRANT_DOCKER_DIR=%h/Documents/Projects"
-ExecStart=bash -c "vagrant resume || vagrant up"
+Environment="VAGRANT_CWD=%h/.local/share/vboxdocker/"
+EnvironmentFile=%h/.local/share/vboxdocker/%i.conf
+ExecStart=vagrant up
 ExecStop=vagrant suspend
 RemainAfterExit=yes
 

@@ -23,7 +23,7 @@ jobs:
       - name: install service
         run: |
           sudo mkdir -p /usr/lib/systemd/user
-          sudo cp service /usr/lib/systemd/user/docker-userlevel.service
+          sudo cp service /usr/lib/systemd/user/vboxdocker@.service
 
       - name: run test
-        run: systemd-analyze --user verify docker-userlevel.service
+        run: systemd-analyze --user verify vboxdocker@.service

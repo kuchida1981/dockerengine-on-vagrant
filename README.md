@@ -21,6 +21,7 @@ Vagrant, VirtualBox, Docker, Systemd にそれなりに習熟した人向け.
 * VirtualBox
 * Docker CLI
 * Vagrant
+* Systemd の実行環境
 
 
 ## Usage
@@ -131,6 +132,8 @@ Vagrantにおけるマシンの名前です.
 
 ## Tips
 
+### 仮想マシンのIPを確認する
+
 仮想マシンのIPを確認する場合は, まず `vagrant global-status` を実行します.
 
 ```
@@ -172,3 +175,26 @@ $ VBOXDCR_NAME=vboxdocker-default vagrant ssh e02b0b1 -c "ip addr"
 ```
 
 ここは少し使いづらい.
+
+### 複数の仮想マシンでDocker環境を使い分ける
+
+複数の仮想マシンでDocker環境を使い分ける方法です.
+
+`$HOME/.local/share/vboxdocker/default.conf` を複製し, 同じ場所に別名をつけて保存します.
+
+ここでは `$HOME/.local/share/vboxdocker/projextx.conf` という名前で保存するものとします.
+
+```plaintext:$HOME/.local/share/vboxdocker/projectx.conf
+VBOXDCR_GUESTPORT=2376
+VBOXDCR_HOSTPORT=22376
+VBOXDCR_SHAREDDIR=/home/kosuke/Projects/projectx
+VBOXDCR_NAME=vboxdocker-projectx
+VBOXDCR_VM_DISKSIZE=20GB
+VBOXDCR_VM_MEMORY=2048
+VBOXDCR_VM_CPUS=6
+VBOXDCR_NETWORK=vboxnet1
+```
+
+その際の `VBOXDCR_HOSTPORT` と `VBOXDCR_NAME` は既存のものと別の値にしておきます.
+
+そのあとは `systemctl --user enable --now vboxdocker@projectx.service` でサービスを起動/有効化できます.
